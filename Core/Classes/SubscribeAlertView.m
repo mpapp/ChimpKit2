@@ -10,8 +10,8 @@
 #import "ChimpKit.h"
 
 @interface SubscribeAlertView()
-@property (nonatomic, retain) ChimpKit *chimpKit;
-@property (nonatomic, retain) NSString *listId;
+@property (nonatomic, strong) ChimpKit *chimpKit;
+@property (nonatomic, strong) NSString *listId;
 @end
 
 @implementation SubscribeAlertView
@@ -34,19 +34,9 @@
         //Set the delegate to self so we can handle button presses
         self.delegate = self;
 
-		if ([self respondsToSelector:@selector(setAlertViewStyle:)]) {
-			self.alertViewStyle = UIAlertViewStylePlainTextInput;
-			
-			self.textField = [self textFieldAtIndex:0];
-		} else {
-			UITextField *aTextField = [[[UITextField alloc] initWithFrame:CGRectZero] autorelease];
-			aTextField.borderStyle = UITextBorderStyleRoundedRect;
-			aTextField.delegate = self;
-			
-			self.textField = aTextField;
-			
-			[self addSubview:self.textField];
-		}
+        self.alertViewStyle = UIAlertViewStylePlainTextInput;
+        
+        self.textField = [self textFieldAtIndex:0];
 		
 		// Common text field properties
 		self.textField.placeholder = @"Email Address";
@@ -56,12 +46,8 @@
         
         self.listId = aListId;
         
-        ChimpKit *cKit = [[[ChimpKit alloc] initWithDelegate:self andApiKey:apiKey] autorelease];
+        ChimpKit *cKit = [[ChimpKit alloc] initWithDelegate:self andApiKey:apiKey];
         self.chimpKit = cKit;
-        
-        //ChimpKit expects self to be around (since it's the delegate!) 
-        //so retain ourselves just in case
-        [self retain];
     }
 	
     return self;
@@ -106,12 +92,6 @@
 	[self.textField becomeFirstResponder];
 }
 
-- (void)dealloc {    
-    [textField release];
-    [chimpKit release];
-    [listId release];
-    [super dealloc];
-}
 
 #pragma mark - ChimpKit Delegate Methods
 
@@ -124,11 +104,9 @@
 												  cancelButtonTitle:@"OK"
 												  otherButtonTitles:nil];
 		[errorAlertView show];
-		[errorAlertView release];
     }
 
     //Release self since we retained self in init and self's work is now done.
-    [self release];
 }
 
 #pragma mark - <UIAlertViewDelegate> Methods

@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SBJson.h"
 
 @class ChimpKit;
 
@@ -25,7 +24,7 @@
 @end
 
 @interface ChimpKit : NSOperation {
-    id<ChimpKitDelegate> delegate;
+    id<ChimpKitDelegate> __unsafe_unretained delegate;
     SEL onSuccess;
     SEL onFailure;
 
@@ -39,14 +38,14 @@
     NSMutableData *responseData;
 }
 
-@property (assign, readwrite) id<ChimpKitDelegate> delegate;
-@property (nonatomic, retain) id userInfo;
+@property (unsafe_unretained, readwrite) id<ChimpKitDelegate> delegate;
+@property (nonatomic, strong) id userInfo;
 
-@property (nonatomic, retain) NSString *apiUrl;
-@property (nonatomic, retain) NSString *apiKey;
+@property (nonatomic, strong) NSString *apiUrl;
+@property (nonatomic, strong) NSString *apiKey;
 
-@property (nonatomic, retain) NSURLConnection *connection;
-@property (nonatomic, retain) NSMutableData *responseData;
+@property (nonatomic, strong) NSURLConnection *connection;
+@property (nonatomic, strong) NSMutableData *responseData;
 
 @property (nonatomic, readonly) NSString *responseString;
 @property (nonatomic, readonly) NSInteger responseStatusCode;

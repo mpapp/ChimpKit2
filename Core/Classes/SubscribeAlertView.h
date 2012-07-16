@@ -20,7 +20,7 @@
     NSString *listId;
 }
 
-@property (nonatomic, retain) UITextField *textField;
+@property (nonatomic, strong) UITextField *textField;
 
 - (id)initWithTitle:(NSString *)title
             message:(NSString *)message

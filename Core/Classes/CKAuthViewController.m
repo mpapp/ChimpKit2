@@ -7,7 +7,6 @@
 //
 
 #import "CKAuthViewController.h"
-#import "SBJson.h"
 
 @interface CKAuthViewController()
 - (void)authWithClientId:(NSString *)yd andSecret:(NSString *)secret;
@@ -42,9 +41,9 @@
     
     //If presented modally in a new VC, add the cancel button
     if ([self.navigationController.viewControllers objectAtIndex:0] == self) {
-        self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
                                                                                                target:self 
-                                                                                               action:@selector(cancelButtonPressed:)] autorelease];
+                                                                                               action:@selector(cancelButtonPressed:)];
     }
 }
 
@@ -72,16 +71,6 @@
     [super viewDidUnload];
 }
 
-- (void)dealloc {
-    [connection release];
-    [connectionData release];
-    [clientId release];
-    [clientSecret release];
-    [accessToken release];
-    [webview release];
-    [spinner release];
-    [super dealloc];
-}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
@@ -98,8 +87,8 @@
                      kAuthorizeUrl,
                      self.clientId,
                      kRedirectUrl];
-    NSURLRequest *request = [[[NSURLRequest alloc] initWithURL:
-                              [NSURL URLWithString:url]] autorelease];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:
+                              [NSURL URLWithString:url]];
     [self.webview loadRequest:request];
 }
 
@@ -117,7 +106,7 @@
 
     [request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
 
-    self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] autorelease];
+    self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 }
 
 - (void)getAccessTokenMetaDataForAccessToken:(NSString *)anAccessToken {
@@ -127,7 +116,7 @@
     [request setHTTPMethod:@"GET"];
     [request setValue:[NSString stringWithFormat:@"Bearer %@", anAccessToken] forHTTPHeaderField:@"Authorization"];
     
-    self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] autorelease];
+    self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 }
 
 - (void)cleanup {
@@ -190,11 +179,15 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSString *response = [[[NSString alloc] initWithData:self.connectionData encoding:NSUTF8StringEncoding] autorelease];
+    NSString *response = [[NSString alloc] initWithData:self.connectionData encoding:NSUTF8StringEncoding];
     if (kCKAuthDebug) NSLog(@"Auth Response: %@", response);
 
+    NSDictionary *jsonValue = [NSJSONSerialization JSONObjectWithData:self.connectionData
+                                                              options:NSJSONReadingMutableContainers | NSJSONReadingAllowFragments
+                                                                error:nil];
+
     if (!self.accessToken) {
-        self.accessToken = [[response JSONValue] objectForKey:@"access_token"];
+        self.accessToken = [jsonValue objectForKey:@"access_token"];
 
         //Get the access token metadata so we can return a proper API key
         [self getAccessTokenMetaDataForAccessToken:self.accessToken];
@@ -203,7 +196,7 @@
 
         //And we're done. We can now concat the access token and the data center
         //to form the MailChimp API key and notify our delegate
-        NSString *dataCenter = [[response JSONValue] objectForKey:@"dc"];
+        NSString *dataCenter = [jsonValue objectForKey:@"dc"];
         NSString *apiKey = [NSString stringWithFormat:@"%@-%@", self.accessToken, dataCenter];
         [self.delegate ckAuthSucceededWithApiKey:apiKey];
 

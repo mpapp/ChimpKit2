@@ -56,19 +56,20 @@
                                                                    listId:@"<LIST ID>" 
                                                         cancelButtonTitle:@"Cancel"
                                                      subscribeButtonTitle:@"Subscribe"];
-    [alert show];
-    [alert release];
+//    [alert show];
     
     
-//    if (!shownAuthView) {
-//        shownAuthView = YES;
-//
-//        //You don't have to use a navigation controller, but we'll put a cancel button on it for you if you do
-//        CKAuthViewController *authViewController = [[[CKAuthViewController alloc] initWithClientId:@"<YOUR_CLIENT_ID>" andClientSecret:@"<YOUR_CLIENT_SECRET"] autorelease];
-//        authViewController.delegate = self;
-//        UINavigationController *navigationController = [[[UINavigationController alloc] initWithRootViewController:authViewController] autorelease];
-//        [self presentModalViewController:navigationController animated:YES];
-//    }
+    //Authenticating via OAuth2
+
+    if (!shownAuthView) {
+        shownAuthView = YES;
+
+        //You don't have to use a navigation controller, but we'll put a cancel button on it for you if you do
+        CKAuthViewController *authViewController = [[CKAuthViewController alloc] initWithClientId:@"<YOUR_CLIENT_ID>" andClientSecret:@"<YOUR_CLIENT_SECRET>"];
+        authViewController.delegate = self;
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:authViewController];
+        [self presentModalViewController:navigationController animated:YES];
+    }
 }
 
 - (void)ckAuthSucceededWithApiKey:(NSString *)apiKey {
@@ -96,8 +97,5 @@
 }
 
 
-- (void)dealloc {
-    [super dealloc];
-}
 
 @end

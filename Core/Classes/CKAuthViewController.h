@@ -32,18 +32,18 @@
     NSMutableData *connectionData;
 }
 
-@property (assign, readwrite) id<CKAuthViewControllerDelegate> delegate;
+@property (unsafe_unretained, readwrite) id<CKAuthViewControllerDelegate> delegate;
 
-@property (retain, nonatomic) NSString *clientId;
-@property (retain, nonatomic) NSString *clientSecret;
+@property (strong, nonatomic) NSString *clientId;
+@property (strong, nonatomic) NSString *clientSecret;
 
-@property (retain, nonatomic) NSString *accessToken;
+@property (strong, nonatomic) NSString *accessToken;
 
-@property (retain, nonatomic) NSURLConnection *connection;
-@property (retain, nonatomic) NSMutableData *connectionData;
+@property (strong, nonatomic) NSURLConnection *connection;
+@property (strong, nonatomic) NSMutableData *connectionData;
 
-@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
-@property (retain, nonatomic) IBOutlet UIWebView *webview;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (strong, nonatomic) IBOutlet UIWebView *webview;
 
 - (id)initWithClientId:(NSString *)cId andClientSecret:(NSString *)cSecret;
 @end

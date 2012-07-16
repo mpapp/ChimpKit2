@@ -22,7 +22,12 @@ static NSUInteger timeout = 10;
 
 @implementation ChimpKit
 
-@synthesize apiUrl, apiKey, delegate, connection, responseData, userInfo;
+@synthesize apiUrl = _apiUrl;
+@synthesize apiKey = _apiKey;
+@synthesize delegate = _delegate;
+@synthesize connection = _connection;
+@synthesize responseData = _responseData;
+@synthesize userInfo = _userInfo;
 @synthesize responseString = _responseString;
 @synthesize responseStatusCode = _responseStatusCode;
 @synthesize error = _error;
@@ -34,10 +39,10 @@ static NSUInteger timeout = 10;
 #pragma mark - Initialization
 
 - (void)setApiKey:(NSString*)key {
-    apiKey = key;
-    if (apiKey) {
+    _apiKey = key;
+    if (_apiKey) {
         //Parse out the datacenter and template it into the URL.
-        NSArray *apiKeyParts = [apiKey componentsSeparatedByString:@"-"];
+        NSArray *apiKeyParts = [_apiKey componentsSeparatedByString:@"-"];
         if ([apiKeyParts count] > 1) {
             self.apiUrl = [NSString stringWithFormat:@"https://%@.api.mailchimp.com/1.3/?method=", [apiKeyParts objectAtIndex:1]];
         }
@@ -67,7 +72,10 @@ static NSUInteger timeout = 10;
         [postBodyParams setValuesForKeysWithDictionary:params];
     }
 
-    NSString *encodedParamsAsJson = [self encodeString:[postBodyParams JSONRepresentation]];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:postBodyParams options:0 error:nil];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    NSString *encodedParamsAsJson = [self encodeString:jsonString];
     NSMutableData *postData = [NSMutableData dataWithData:[encodedParamsAsJson dataUsingEncoding:NSUTF8StringEncoding]];
     return postData;
 }
@@ -84,7 +92,7 @@ static NSUInteger timeout = 10;
     NSMutableData *postData = [self encodeRequestParams:params];
     [request setHTTPBody:postData];
 
-    self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] autorelease];
+    self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 }
 
 #pragma mark - NSURLConnection delegate methods
@@ -117,7 +125,7 @@ static NSUInteger timeout = 10;
 }
 
 - (void)notifyDelegateOfError:(NSError *)error {
-    _error = [error retain];
+    _error = error;
 
     if ([self.delegate respondsToSelector:@selector(ckRequestFailed:andError:)]) {
         [self.delegate performSelector:@selector(ckRequestFailed:andError:) withObject:self withObject:error];
@@ -127,12 +135,12 @@ static NSUInteger timeout = 10;
 }
 
 - (NSString *)encodeString:(NSString *)unencodedString {
-    NSString *encodedString = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, 
-                                                                                  (CFStringRef)unencodedString, 
+    NSString *encodedString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL, 
+                                                                                  (__bridge CFStringRef)unencodedString, 
                                                                                   NULL, 
                                                                                   (CFStringRef)@"!*'();:@&=+$,/?%#[]", 
-                                                                                  kCFStringEncodingUTF8);
-    return [encodedString autorelease];
+                                                                                  kCFStringEncodingUTF8));
+    return encodedString;
 }
 
 #pragma mark - Tear down
@@ -152,19 +160,7 @@ static NSUInteger timeout = 10;
 
 - (void)dealloc {
     [self cleanup];
-
-    if (_responseString) {
-        [_responseString release];
-    }
-    
-    if (_error) {
-        [_error release];
-    }
-
-    self.responseData = nil;
     self.apiKey = nil;
-    self.apiUrl = nil;
-    [super dealloc];
 }
 
 @end

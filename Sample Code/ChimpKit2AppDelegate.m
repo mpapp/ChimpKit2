@@ -29,12 +29,11 @@
     //We can set ChimpKit's timeout globally
     [ChimpKit setTimeout:15];
     
-    ChimpKit *ck = [[[ChimpKit alloc] initWithDelegate:self 
-                                            andApiKey:@"<YOUR_API_KEY>"] 
-                    autorelease];
+    ChimpKit *ck = [[ChimpKit alloc] initWithDelegate:self 
+                                            andApiKey:@"<YOUR_API_KEY>"];
 
     // This call would fetch lists
-//    [ck callApiMethod:@"lists" withParams:nil];
+    [ck callApiMethod:@"lists" withParams:nil];
 
     // Build the params dictionary (please see documentation at http://apidocs.mailchimp.com/1.3 )
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -48,7 +47,7 @@
     [mergeVars setValue:@"Last" forKey:@"LNAME"];
     [params setValue:mergeVars forKey:@"merge_vars"];
 
-//    [ck callApiMethod:@"listSubscribe" withParams:params];
+    [ck callApiMethod:@"listSubscribe" withParams:params];
 
     return YES;
 }
@@ -110,11 +109,6 @@
 }
 
 
-- (void)dealloc {
-    [viewController release];
-    [window release];
-    [super dealloc];
-}
 
 
 @end
