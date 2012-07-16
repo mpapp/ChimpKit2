@@ -91,10 +91,6 @@ Your delegate can optionally implement:
 
 If you care to know when the user taps the cancel button.
 
-## Notes
-
-As much as we love ASIHTTPRequest, ChimpKit2 no longer depends on it. ChimpKit2 does, however, still require json-framework.
-
 ##Copyrights
 
 * Copyright (c) 2010-2012 The Rocket Science Group. Please see LICENSE.txt for details.
