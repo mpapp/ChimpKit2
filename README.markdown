@@ -6,7 +6,7 @@ ChimpKit2 is a simple API wrapper for interacting with [MailChimp API](http://ww
 
 A MailChimp account and API key. You can see your API keys [here](http://admin.mailchimp.com/account/api).
 
-ChimpKit2 includes [json-framework](https://github.com/stig/json-framework) as a submodule.
+ChimpKit2 includes requires ARC and iOS5.
 
 ##Installation
 
@@ -14,12 +14,6 @@ Add ChimpKit2 as a submodule of your git repo by doing something like:
 
     cd myrepo
     git submodule add https://github.com/mailchimp/ChimpKit2.git Lib/ChimpKit
-
-You'll then want to cd into ChimpKit and pull in its dependency (json-framework):
-
-    cd Lib/ChimpKit
-    git submodule init
-    git submodule update
 
 ##Usage
 
