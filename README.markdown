@@ -25,9 +25,8 @@ You'll then want to cd into ChimpKit and pull in its dependency (json-framework)
 
 ChimpKit2 requests are designed for one-time use. To make a request first create an instance of ChimpKit:
 
-    ChimpKit *ck = [[[ChimpKit alloc] initWithDelegate:self 
-                                             andApiKey:@"<YOUR_API_KEY>"] 
-                                             autorelease];
+    ChimpKit *ck = [[ChimpKit alloc] initWithDelegate:self 
+                                            andApiKey:@"<YOUR_API_KEY>"];
 
 
 You may have noticed that we passed "self" as the delegate above. You should implement the "ChimpKitDelegate"
@@ -84,7 +83,7 @@ ChimpKit2 defaults to a 10 second timeout. You can change that (globally) to 30 
 	CKAuthViewController *authViewController = [[CKAuthViewController alloc] initWithClientId:@"<YOUR_CLIENT_ID>" 
 																			  andClientSecret:@"<YOUR_CLIENT_SEEKRUT>"];
 	authViewController.delegate = self;
-	UINavigationController *navigationController = [[[UINavigationController alloc] initWithRootViewController:authViewController] autorelease];
+	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:authViewController];
 	[self presentModalViewController:navigationController animated:YES];
 
 Your delegate must implement the CKAuthViewControllerDelegate protocol. The required methods are:
@@ -104,5 +103,5 @@ As much as we love ASIHTTPRequest, ChimpKit2 no longer depends on it. ChimpKit2 
 
 ##Copyrights
 
-* Copyright (c) 2010-2011 The Rocket Science Group. Please see LICENSE.txt for details.
-* MailChimp (c) 2001-2011 The Rocket Science Group.
+* Copyright (c) 2010-2012 The Rocket Science Group. Please see LICENSE.txt for details.
+* MailChimp (c) 2001-2012 The Rocket Science Group.
