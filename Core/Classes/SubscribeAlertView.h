@@ -21,6 +21,7 @@
 }
 
 @property (nonatomic, strong) UITextField *textField;
+@property (nonatomic) BOOL doubleOptIn;
 
 - (id)initWithTitle:(NSString *)title
             message:(NSString *)message
@@ -29,4 +30,11 @@
   cancelButtonTitle:(NSString *)cancelButtonTitle
 subscribeButtonTitle:(NSString *)subscribeButtonTitle;
 
+- (id)initWithTitle:(NSString *)title
+            message:(NSString *)message
+             apiKey:(NSString *)apiKey
+             listId:(NSString *)aListId
+  cancelButtonTitle:(NSString *)cancelButtonTitle
+subscribeButtonTitle:(NSString *)subscribeButtonTitle
+        doubleOptIn:(BOOL)doubleOptIn;
 @end

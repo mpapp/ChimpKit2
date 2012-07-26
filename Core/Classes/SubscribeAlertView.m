@@ -20,10 +20,11 @@
 
 - (id)initWithTitle:(NSString *)title
             message:(NSString *)message
-            apiKey:(NSString *)apiKey
-            listId:(NSString *)aListId
-  cancelButtonTitle:(NSString *)cancelButtonTitle
-  subscribeButtonTitle:(NSString *)subscribeButtonTitle {
+             apiKey:(NSString *)apiKey
+             listId:(NSString *)aListId
+cancelButtonTitle:(NSString *)cancelButtonTitle
+subscribeButtonTitle:(NSString *)subscribeButtonTitle
+        doubleOptIn:(BOOL)doubleOptIn {
 
 	self = [super initWithTitle:title
                         message:message
@@ -33,7 +34,7 @@
     if (self) {
         //Set the delegate to self so we can handle button presses
         self.delegate = self;
-
+        
         self.alertViewStyle = UIAlertViewStylePlainTextInput;
         
         self.textField = [self textFieldAtIndex:0];
@@ -48,9 +49,27 @@
         
         ChimpKit *cKit = [[ChimpKit alloc] initWithDelegate:self andApiKey:apiKey];
         self.chimpKit = cKit;
+        
+        self.doubleOptIn = doubleOptIn;
     }
 	
     return self;
+}
+
+- (id)initWithTitle:(NSString *)title
+            message:(NSString *)message
+            apiKey:(NSString *)apiKey
+            listId:(NSString *)aListId
+  cancelButtonTitle:(NSString *)cancelButtonTitle
+  subscribeButtonTitle:(NSString *)subscribeButtonTitle {
+    
+    return [self initWithTitle:title
+                       message:message
+                        apiKey:apiKey
+                        listId:aListId
+             cancelButtonTitle:cancelButtonTitle
+          subscribeButtonTitle:subscribeButtonTitle
+                   doubleOptIn:NO];
 }
 
 - (void)layoutSubviews {
@@ -116,11 +135,11 @@
 #pragma mark - <UIAlertViewDelegate> Methods
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) { // Subscribe pressed
-         NSMutableDictionary *params = [NSMutableDictionary dictionary];
-         [params setValue:self.listId forKey:@"id"];
-         [params setValue:self.textField.text forKey:@"email_address"];
-         [params setValue:@"false" forKey:@"double_optin"];
-         [self.chimpKit callApiMethod:@"listSubscribe" withParams:params];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setValue:self.listId forKey:@"id"];
+        [params setValue:self.textField.text forKey:@"email_address"];
+        [params setValue:(self.doubleOptIn ? @"true" : @"false") forKey:@"double_optin"];
+        [self.chimpKit callApiMethod:@"listSubscribe" withParams:params];
     }
 }
 
