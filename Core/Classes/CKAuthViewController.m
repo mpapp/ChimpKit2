@@ -156,9 +156,11 @@
     if ([currentUrl rangeOfString:kRedirectUrl].location == 0) {
         NSArray *urlSplit = [currentUrl componentsSeparatedByString:@"code="];
 
-        //The auth code must now be exchanged for an access token (the api key)
-        NSString *authCode = [urlSplit objectAtIndex:1];
-        [self getAccessTokenForAuthCode:authCode];
+		if (urlSplit.count > 1) {
+			//The auth code must now be exchanged for an access token (the api key)
+			NSString *authCode = [urlSplit objectAtIndex:1];
+			[self getAccessTokenForAuthCode:authCode];
+		}
     }
 }
 
