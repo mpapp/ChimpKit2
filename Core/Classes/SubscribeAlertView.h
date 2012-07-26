@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "ChimpKit.h"
 //#define kSubscriptionAlertViewHeight 230
 #define kSubscriptionAlertViewTextFieldHeight 30
 #define kSubscriptionAlertViewTextFieldYPadding 5
 
 @class ChimpKit;
 
-@interface SubscribeAlertView : UIAlertView <UITextFieldDelegate, UIAlertViewDelegate> {
+@interface SubscribeAlertView : UIAlertView <UITextFieldDelegate, UIAlertViewDelegate, ChimpKitDelegate> {
     UITextField *textField;
     ChimpKit *chimpKit;
     NSString *listId;

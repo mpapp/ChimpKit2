@@ -87,26 +87,30 @@
 	}
 }
 
-- (void) show {
+- (void)show {
 	[super show];
 	[self.textField becomeFirstResponder];
 }
 
+- (void)showSubscribeError {
+    UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Subscription Failed"
+                                                             message:@"We couldn't subscribe you to the list.  Please check your email address and try again."
+                                                            delegate:nil
+                                                   cancelButtonTitle:@"OK"
+                                                   otherButtonTitles:nil];
+    [errorAlertView show];
+}
 
 #pragma mark - ChimpKit Delegate Methods
 
-- (void)requestCompleted:(ChimpKit *)request {
-    NSString *response = [request responseString];
-    if (![response isEqualToString:@"true"]) {
-        UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Subscription Failed"
-															message:@"Unable to subscribe your email address. Please check it and try again."
-														   delegate:nil 
-												  cancelButtonTitle:@"OK"
-												  otherButtonTitles:nil];
-		[errorAlertView show];
+- (void)ckRequestSucceeded:(ChimpKit *)ckRequest {
+    if (![ckRequest.responseString isEqualToString:@"true"]) {
+        [self showSubscribeError];
     }
+}
 
-    //Release self since we retained self in init and self's work is now done.
+- (void)ckRequestFailed:(NSError *)error {
+    [self showSubscribeError];
 }
 
 #pragma mark - <UIAlertViewDelegate> Methods

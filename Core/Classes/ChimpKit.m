@@ -119,7 +119,7 @@ static NSUInteger timeout = 10;
 
 - (void)notifyDelegateOfSuccess {
     _responseString = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
-    if ([self.delegate respondsToSelector:@selector(ckRequestSucceeded:)]) {
+    if ((self.delegate != nil) && [self.delegate respondsToSelector:@selector(ckRequestSucceeded:)]) {
         [self.delegate performSelector:@selector(ckRequestSucceeded:) withObject:self];
     }
 }
@@ -127,9 +127,9 @@ static NSUInteger timeout = 10;
 - (void)notifyDelegateOfError:(NSError *)error {
     _error = error;
 
-    if ([self.delegate respondsToSelector:@selector(ckRequestFailed:andError:)]) {
+    if ((self.delegate != nil) && [self.delegate respondsToSelector:@selector(ckRequestFailed:andError:)]) {
         [self.delegate performSelector:@selector(ckRequestFailed:andError:) withObject:self withObject:error];
-    } else if ([self.delegate respondsToSelector:@selector(ckRequestFailed:)]) {
+    } else if ((self.delegate != nil) && [self.delegate respondsToSelector:@selector(ckRequestFailed:)]) {
         [self.delegate performSelector:@selector(ckRequestFailed:) withObject:error];
     }
 }

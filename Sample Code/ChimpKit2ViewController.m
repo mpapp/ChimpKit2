@@ -68,7 +68,7 @@
         CKAuthViewController *authViewController = [[CKAuthViewController alloc] initWithClientId:@"<YOUR_CLIENT_ID>" andClientSecret:@"<YOUR_CLIENT_SECRET>"];
         authViewController.delegate = self;
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:authViewController];
-        [self presentModalViewController:navigationController animated:YES];
+//        [self presentModalViewController:navigationController animated:YES];
     }
 }
 
