@@ -22,7 +22,7 @@
 @synthesize spinner;
 @synthesize webview;
 
-- (id)initWithClientId:(NSString *)cId andClientSecret:(NSString *)cSecret andRedirectUrl:(NSString *)rdirectUrl {
+- (id)initWithClientId:(NSString *)cId clientSecret:(NSString *)cSecret andRedirectUrl:(NSString *)rdirectUrl {
     self = [super init];
     if (self) {
         self.clientId = cId;
@@ -33,7 +33,7 @@
 }
 
 - (id)initWithClientId:(NSString *)cId andClientSecret:(NSString *)cSecret {
-    return [self initWithClientId:cId andClientSecret:cSecret andRedirectUrl:kDefaultRedirectUrl];
+    return [self initWithClientId:cId clientSecret:cSecret andRedirectUrl:kDefaultRedirectUrl];
 }
 
 #pragma mark - View lifecycle

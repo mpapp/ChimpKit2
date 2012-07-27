@@ -47,5 +47,5 @@
 @property (strong, nonatomic) IBOutlet UIWebView *webview;
 
 - (id)initWithClientId:(NSString *)cId andClientSecret:(NSString *)cSecret;
-- (id)initWithClientId:(NSString *)cId andClientSecret:(NSString *)cSecret andRedirectUrl:(NSString *)rdirectUrl;
+- (id)initWithClientId:(NSString *)cId clientSecret:(NSString *)cSecret andRedirectUrl:(NSString *)rdirectUrl;
 @end
