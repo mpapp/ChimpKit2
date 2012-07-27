@@ -10,10 +10,10 @@
 
 #define kCKAuthDebug        0
 
-#define kAuthorizeUrl       @"https://login.mailchimp.com/oauth2/authorize"
-#define kAccessTokenUrl     @"https://login.mailchimp.com/oauth2/token"
-#define kMetaDataUrl        @"https://login.mailchimp.com/oauth2/metadata"
-#define kRedirectUrl        @"https://modev1.mailchimp.com/wait.html"
+#define kAuthorizeUrl           @"https://login.mailchimp.com/oauth2/authorize"
+#define kAccessTokenUrl         @"https://login.mailchimp.com/oauth2/token"
+#define kMetaDataUrl            @"https://login.mailchimp.com/oauth2/metadata"
+#define kDefaultRedirectUrl     @"https://modev1.mailchimp.com/wait.html"
 
 @protocol CKAuthViewControllerDelegate <NSObject>
 
@@ -36,6 +36,7 @@
 
 @property (strong, nonatomic) NSString *clientId;
 @property (strong, nonatomic) NSString *clientSecret;
+@property (strong, nonatomic) NSString *redirectUrl;
 
 @property (strong, nonatomic) NSString *accessToken;
 
@@ -46,4 +47,5 @@
 @property (strong, nonatomic) IBOutlet UIWebView *webview;
 
 - (id)initWithClientId:(NSString *)cId andClientSecret:(NSString *)cSecret;
+- (id)initWithClientId:(NSString *)cId andClientSecret:(NSString *)cSecret andRedirectUrl:(NSString *)rdirectUrl;
 @end

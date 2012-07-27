@@ -17,18 +17,23 @@
 
 @implementation CKAuthViewController
 @synthesize delegate;
-@synthesize clientId, clientSecret, accessToken;
+@synthesize clientId, clientSecret, accessToken, redirectUrl;
 @synthesize connection, connectionData;
 @synthesize spinner;
 @synthesize webview;
 
-- (id)initWithClientId:(NSString *)cId andClientSecret:(NSString *)cSecret {
+- (id)initWithClientId:(NSString *)cId andClientSecret:(NSString *)cSecret andRedirectUrl:(NSString *)rdirectUrl {
     self = [super init];
     if (self) {
         self.clientId = cId;
         self.clientSecret = cSecret;
+        self.redirectUrl = rdirectUrl;
     }
     return self;
+}
+
+- (id)initWithClientId:(NSString *)cId andClientSecret:(NSString *)cSecret {
+    return [self initWithClientId:cId andClientSecret:cSecret andRedirectUrl:kDefaultRedirectUrl];
 }
 
 #pragma mark - View lifecycle
@@ -64,6 +69,7 @@
     [self setConnectionData:nil];
     [self setClientId:nil];
     [self setClientSecret:nil];
+    [self setRedirectUrl:nil];
     [self setAccessToken:nil];
     [self setWebview:nil];
     
@@ -86,7 +92,7 @@
     NSString *url = [NSString stringWithFormat:@"%@?response_type=code&client_id=%@&redirect_uri=%@",
                      kAuthorizeUrl,
                      self.clientId,
-                     kRedirectUrl];
+                     self.redirectUrl];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:
                               [NSURL URLWithString:url]];
     [self.webview loadRequest:request];
@@ -102,7 +108,7 @@
                           self.clientId,
                           self.clientSecret,
                           authCode,
-                          kRedirectUrl];
+                          self.redirectUrl];
 
     [request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
 
@@ -153,7 +159,7 @@
     if (kCKAuthDebug) NSLog(@"CKAuthViewController webview loaded url: %@", currentUrl);
 
     //If MailChimp redirected us to our redirect url, then the user has been auth'd
-    if ([currentUrl rangeOfString:kRedirectUrl].location == 0) {
+    if ([currentUrl rangeOfString:self.redirectUrl].location == 0) {
         NSArray *urlSplit = [currentUrl componentsSeparatedByString:@"code="];
 
 		if (urlSplit.count > 1) {
