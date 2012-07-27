@@ -152,25 +152,36 @@
     [self.spinner setHidden:NO];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)aWebView {
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     [self.spinner setHidden:YES];
-
-    NSString *currentUrl = aWebView.request.URL.absoluteString;
-    if (kCKAuthDebug) NSLog(@"CKAuthViewController webview loaded url: %@", currentUrl);
-
+    
+    NSString *currentUrl = request.URL.absoluteString;
+    if (kCKAuthDebug) NSLog(@"CKAuthViewController webview shouldStartLoadWithRequest url: %@", currentUrl);
+    
     //If MailChimp redirected us to our redirect url, then the user has been auth'd
     if ([currentUrl rangeOfString:self.redirectUrl].location == 0) {
         NSArray *urlSplit = [currentUrl componentsSeparatedByString:@"code="];
-
+        
 		if (urlSplit.count > 1) {
 			//The auth code must now be exchanged for an access token (the api key)
 			NSString *authCode = [urlSplit objectAtIndex:1];
 			[self getAccessTokenForAuthCode:authCode];
 		}
+        
+        return NO;
     }
+    
+    return YES;
 }
 
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    [self.spinner setHidden:YES];
+}
+
+
 - (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error {
+    [self.spinner setHidden:YES];
+
     //ToDo: Show error
 }
 
